@@ -69,14 +69,23 @@ public class CadastroVIEW extends javax.swing.JFrame {
         
         produto.setStatus("À Venda");
         
-        // 3. Chamar a DAO para gravar no banco de dados
-        ProdutosDAO produtodao = new ProdutosDAO();
-        produtodao.cadastrarProduto(produto);
-        
-        // 4. Limpar os campos após o sucesso
-        txtNome.setText("");
-        txtValor.setText("");
-        txtNome.requestFocus();
+        try {
+            // 3. Chamar a DAO para gravar no banco de dados
+            ProdutosDAO produtodao = new ProdutosDAO();
+            produtodao.cadastrarProduto(produto);
+            
+            // 4. Exibir mensagem de sucesso exigida pela atividade
+            JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso!");
+            
+            // 5. Limpar os campos após o sucesso
+            txtNome.setText("");
+            txtValor.setText("");
+            txtNome.requestFocus();
+            
+        } catch (Exception e) {
+            // Mensagem caso ocorra algum erro na gravação
+            JOptionPane.showMessageDialog(this, "Erro ao cadastrar o produto: " + e.getMessage());
+        }
     }
 
     // Método principal para permitir testar a tela isoladamente se necessário
