@@ -1,45 +1,70 @@
-    package leiloes;
+
+package leiloes;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
+import java.util.ArrayList;
 
 public class ProdutosDAO {
 
-    Connection conn;
-    PreparedStatement prep;
+    // Método para cadastrar produtos
+    public void cadastrarProduto(ProdutosDTO produto) throws SQLException {
 
-    public void cadastrarProduto(ProdutosDTO produto) {
-        // Chama a classe correta com C maiúsculo
-        conn = new ConectaDAO().connectDB();
-        
-        if (conn == null) {
-            JOptionPane.showMessageDialog(null, "Não foi possível conectar ao banco de dados. Verifique o MySQL.");
-            return;
-        }
-        
         String sql = "INSERT INTO produtos (nome, valor, status) VALUES (?, ?, ?)";
-        
-        try {
-            prep = conn.prepareStatement(sql);
+
+        Connection conn = new ConectaDAO().connectDB();
+
+        if (conn == null) {
+            throw new SQLException("Não foi possível conectar ao banco de dados.");
+        }
+
+        try (PreparedStatement prep = conn.prepareStatement(sql)) {
+
             prep.setString(1, produto.getNome());
             prep.setDouble(2, produto.getValor());
             prep.setString(3, produto.getStatus());
-            
+
             prep.executeUpdate();
-            
-            JOptionPane.showMessageDialog(null, "Registo efetuado com sucesso!");
-            
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar produto: " + e.getMessage());
+
         } finally {
-            try {
-                if (prep != null) prep.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Erro ao fechar conexão: " + e.getMessage());
-            }
+            conn.close();
         }
+    }
+
+    // Método para listar todos os produtos cadastrados
+    public ArrayList<ProdutosDTO> listarProdutos() throws SQLException {
+
+        ArrayList<ProdutosDTO> lista = new ArrayList<>();
+
+        String sql = "SELECT id, nome, valor, status FROM produtos";
+
+        Connection conn = new ConectaDAO().connectDB();
+
+        if (conn == null) {
+            throw new SQLException("Não foi possível conectar ao banco de dados.");
+        }
+
+        try (PreparedStatement prep = conn.prepareStatement(sql);
+             ResultSet rs = prep.executeQuery()) {
+
+            while (rs.next()) {
+
+                ProdutosDTO produto = new ProdutosDTO();
+
+                produto.setId(rs.getInt("id"));
+                produto.setNome(rs.getString("nome"));
+                produto.setValor(rs.getDouble("valor"));
+                produto.setStatus(rs.getString("status"));
+
+                lista.add(produto);
+            }
+
+        } finally {
+            conn.close();
+        }
+
+        return lista;
     }
 }
