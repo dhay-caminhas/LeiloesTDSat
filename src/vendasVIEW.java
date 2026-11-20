@@ -20,7 +20,7 @@ public class vendasVIEW extends javax.swing.JFrame {
             model.setColumnIdentifiers(new Object[]{"ID", "Nome", "Valor", "Status"});
             model.setRowCount(0); // Limpa a tabela antes de preencher
             
-            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutos();
+            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutosVendidos();
             
             for (int i = 0; i < listagem.size(); i++) {
                 model.addRow(new Object[]{
@@ -65,7 +65,7 @@ public class vendasVIEW extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTable1);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jLabel1.setText("Lista de Produtos");
+        jLabel1.setText("Produtos Vendidos");
 
         jButton1.setText("Voltar");
         jButton1.addActionListener(this::jButton1ActionPerformed);
