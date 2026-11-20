@@ -111,7 +111,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Helvetica Neue" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Lista de Produtos"/>
+        <Property name="text" type="java.lang.String" value="Produtos Vendidos"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jButton1">

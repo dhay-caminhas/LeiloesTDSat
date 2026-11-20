@@ -67,4 +67,75 @@ public class ProdutosDAO {
 
         return lista;
     }
+    
+    public void venderProduto(int id) throws SQLException {
+
+        String sql = "UPDATE produtos SET status = ? WHERE id = ?";
+
+        Connection conn = new ConectaDAO().connectDB();
+
+        if (conn == null) {
+            throw new SQLException("Não foi possível conectar ao banco de dados.");
+        }
+
+        try (PreparedStatement prep = conn.prepareStatement(sql)) {
+
+            prep.setString(1, "Vendido");
+            prep.setInt(2, id);
+
+            int linhasAfetadas = prep.executeUpdate();
+
+            if (linhasAfetadas == 0) {
+                throw new SQLException("Produto não encontrado.");
+            }
+
+        } finally {
+            conn.close();
+        }
+    }
+    
+    
+    // Método para listar somente os produtos vendidos
+    public ArrayList<ProdutosDTO> listarProdutosVendidos() throws SQLException {
+
+        ArrayList<ProdutosDTO> lista = new ArrayList<>();
+
+        String sql = "SELECT id, nome, valor, status FROM produtos WHERE status = ?";
+
+        Connection conn = new ConectaDAO().connectDB();
+
+        if (conn == null) {
+            throw new SQLException("Não foi possível conectar ao banco de dados.");
+        }
+
+        try (PreparedStatement prep = conn.prepareStatement(sql)) {
+
+            prep.setString(1, "Vendido");
+
+            try (ResultSet rs = prep.executeQuery()) {
+
+                while (rs.next()) {
+
+                    ProdutosDTO produto = new ProdutosDTO();
+
+                    produto.setId(rs.getInt("id"));
+                    produto.setNome(rs.getString("nome"));
+                    produto.setValor(rs.getDouble("valor"));
+                    produto.setStatus(rs.getString("status"));
+
+                    lista.add(produto);
+                }
+            }
+
+        } finally {
+            conn.close();
+        }
+
+        return lista;
+    }
+
+    
 }
+
+
+    

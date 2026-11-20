@@ -56,13 +56,12 @@ public CadastroVIEW() {
     add(btnVerProdutos);
 
     btnVerProdutos.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent evt) {
-            new vendasVIEW().setVisible(true);
-        }
-    });
+    @Override
+    public void actionPerformed(ActionEvent evt) {
+        new produtosVIEW().setVisible(true);
+    }
+});
 }
-
 
     private void btnCadastrarActionPerformed(ActionEvent evt) {
 
